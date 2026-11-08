@@ -3,7 +3,7 @@ html{min-height:100%;overscroll-behavior:none}body{min-height:100svh;padding:env
 @media (pointer:coarse),(max-width:760px){.mobile-controls{display:flex}.touch-help{display:block}header{margin:8px 0}h1{font-size:19px}small{font-size:10px}footer{font-size:11px;line-height:1.7;margin:7px 0}footer span:first-child{display:none}main{width:96vw}.actions{max-width:220px}}
 @media (orientation:landscape) and (max-height:600px) and (pointer:coarse){body{display:flex;justify-content:center}main{width:100%;position:relative}header{position:absolute;right:12px;top:38px;z-index:3;margin:0}header>div{display:none}header button{font-size:11px;opacity:.75;padding:4px 10px;min-height:34px}canvas{width:auto;height:min(100svh,56vw);max-width:100%;margin:auto;border-radius:0}.mobile-controls{position:absolute;inset:0;pointer-events:none;align-items:flex-end;padding:0 18px 42px}.mobile-controls>*{pointer-events:auto}.stick{width:105px;height:105px;flex-basis:105px;opacity:.65}.actions{max-width:220px;opacity:.85}.actions button{min-width:90px;font-size:12px;padding:6px}.touch-help,footer{display:none}}
 .audio-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0;color:#a8c2dd;font-size:12px}.audio-controls input{width:85px;min-height:32px;accent-color:#70dfef}.audio-controls button{padding:6px 12px}.audio-controls label{display:flex;align-items:center;gap:6px}@media (orientation:landscape) and (max-height:600px) and (pointer:coarse){.audio-controls{position:absolute;top:38px;left:12px;z-index:4;margin:0;gap:4px}.audio-controls button{min-height:34px;padding:4px 8px}.audio-controls input{width:65px}.audio-hint{display:none}}
-</style><main><header><div><h1>STARWING</h1><small>SOUND EDITION / THE AZURE RIFT</small></div><button id="start">開始 / リトライ</button></header><div class="audio-controls"><button id="sound" aria-pressed="true">音 ON</button><label for="volume">音量 <input id="volume" type="range" min="0" max="100" value="30"><output id="volume-value" for="volume">30%</output></label><span class="audio-hint">開始するとBGM・効果音が流れます</span></div><canvas id="screen" width="1000" height="560" aria-label="横スクロールシューティングゲーム"></canvas><p class="touch-help">横持ち推奨 ｜ 左パッドで移動・自動連射 ｜ カプセル取得後に「強化」</p><div class="mobile-controls"><div class="stick" id="stick" role="group" aria-label="移動パッド"><div class="knob" id="knob"></div></div><div class="actions"><button class="power" id="power" disabled>強化 —</button><button id="pause">一時停止</button><button id="auto" aria-pressed="true">自動連射 ON</button></div></div><footer><span><kbd>↑↓←→</kbd> / WASD 移動　<kbd>Z</kbd> / Space 連射　<kbd>X</kbd> 強化　<kbd>P</kbd> 一時停止</span><span>カプセルで強化枠を選択 → Xで装備。約90秒後にボス出現。</span></footer></main><script>
+</style><main><header><div><h1>STARWING</h1><small>RICH SOUND EDITION / THE AZURE RIFT</small></div><button id="start">開始 / リトライ</button></header><div class="audio-controls"><button id="sound" aria-pressed="true">音 ON</button><label for="volume">音量 <input id="volume" type="range" min="0" max="100" value="30"><output id="volume-value" for="volume">30%</output></label><span class="audio-hint">開始するとBGM・効果音が流れます</span></div><canvas id="screen" width="1000" height="560" aria-label="横スクロールシューティングゲーム"></canvas><p class="touch-help">横持ち推奨 ｜ 左パッドで移動・自動連射 ｜ カプセル取得後に「強化」</p><div class="mobile-controls"><div class="stick" id="stick" role="group" aria-label="移動パッド"><div class="knob" id="knob"></div></div><div class="actions"><button class="power" id="power" disabled>強化 —</button><button id="pause">一時停止</button><button id="auto" aria-pressed="true">自動連射 ON</button></div></div><footer><span><kbd>↑↓←→</kbd> / WASD 移動　<kbd>Z</kbd> / Space 連射　<kbd>X</kbd> 強化　<kbd>P</kbd> 一時停止</span><span>カプセルで強化枠を選択 → Xで装備。約90秒後にボス出現。</span></footer></main><script>
 'use strict';
 const canvas=document.getElementById('screen'),g=canvas.getContext('2d'),keys={};
 let state='title',time=0,score=0,lives=3,charge=0,shotCD=0,spawnCD=0,boss=null,bossMade=false,player,shots=[],enemies=[],bullets=[],caps=[],particles=[],history=[],best=0;
@@ -68,15 +68,15 @@ g.fillStyle='#0b1527';g.fillRect(0,507,1000,53);names.forEach((n,i)=>{let x=14+i
 if(state!=='play'){g.fillStyle='rgba(4,10,23,.78)';g.fillRect(0,40,1000,467);let title={title:'STARWING',pause:'PAUSED',over:'MISSION FAILED',clear:'SECTOR CLEAR'}[state];text(title,500,238,48,'#dcf7ff','center');text(state==='title'?'蒼い宙域を突破せよ。カプセルを集め、機体を強化。':state==='pause'?'再開ボタン または P キーで再開':`SCORE ${score}  /  BEST ${best}`,500,287,18,'#99b9d3','center');text(state==='pause'?'離席・ウィンドウ切替でも自動停止します':'Enter または「開始 / リトライ」で出撃',500,334,16,'#ffbd70','center');text('OFFLINE • SINGLE PLAYER • ORIGINAL ARCADE',500,417,12,'#607996','center')}}
 // Original synthesized arcade score; no external audio files.
 const sound = (() => {
-  let ctx, master, noise, next=0, step=0, track='', muted=false, volume=.3;
+  let ctx, master, musicBus, noise, inMusic=false, next=0, step=0, track='', muted=false, volume=.3;
   const voices=new Set();
   try { muted=localStorage.getItem('starwing-muted')==='true'; const v=localStorage.getItem('starwing-volume'); if(v!==null&&Number.isFinite(+v))volume=Math.max(0,Math.min(1,+v)); } catch {}
   const hz=n=>440*2**((n-69)/12);
-  function stop(){for(const v of voices){try{v.stop()}catch{}}voices.clear();}
+  function stop(){if(musicBus){musicBus.gain.cancelScheduledValues(ctx.currentTime);musicBus.gain.setValueAtTime(.75,ctx.currentTime);}for(const v of voices){try{v.stop()}catch{}}voices.clear();}
   function gain(){if(master){master.gain.cancelScheduledValues(ctx.currentTime);master.gain.setTargetAtTime(muted?0:volume,ctx.currentTime,.015);}}
-  function unlock(){try{if(!ctx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;ctx=new AC();master=ctx.createGain();const limiter=ctx.createDynamicsCompressor();master.connect(limiter);limiter.connect(ctx.destination);noise=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate);const d=noise.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;gain();}if(ctx.state!=='running')ctx.resume().catch(()=>{});}catch{}}
-  function tone(f,t,d,type='square',level=.1,end){if(!ctx||muted)return;const o=ctx.createOscillator(),a=ctx.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(end)o.frequency.exponentialRampToValueAtTime(end,t+d);a.gain.setValueAtTime(0,t);a.gain.linearRampToValueAtTime(level,t+.004);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(a);a.connect(master);voices.add(o);o.onended=()=>{voices.delete(o);o.disconnect();a.disconnect()};o.start(t);o.stop(t+d+.015);}
-  function hiss(t,d,level=.12,f=1500){if(!ctx||muted)return;const o=ctx.createBufferSource(),a=ctx.createGain(),filter=ctx.createBiquadFilter();o.buffer=noise;filter.type='lowpass';filter.frequency.value=f;a.gain.setValueAtTime(level,t);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(filter);filter.connect(a);a.connect(master);voices.add(o);o.onended=()=>{voices.delete(o);o.disconnect();filter.disconnect();a.disconnect()};o.start(t);o.stop(t+d);}
+  function unlock(){try{if(!ctx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;ctx=new AC();master=ctx.createGain();musicBus=ctx.createGain();musicBus.gain.value=.75;musicBus.connect(master);const limiter=ctx.createDynamicsCompressor();master.connect(limiter);limiter.connect(ctx.destination);noise=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate);const d=noise.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;gain();}if(ctx.state!=='running')ctx.resume().catch(()=>{});}catch{}}
+  function tone(f,t,d,type='square',level=.1,end,pan=0){if(!ctx||muted)return;const o=ctx.createOscillator(),a=ctx.createGain(),filter=ctx.createBiquadFilter(),stereo=ctx.createStereoPanner();filter.type='lowpass';filter.frequency.value=type==='sawtooth'?3600:6500;stereo.pan.value=pan;o.type=type;o.frequency.setValueAtTime(f,t);if(end)o.frequency.exponentialRampToValueAtTime(end,t+d);a.gain.setValueAtTime(0,t);a.gain.linearRampToValueAtTime(level,t+.004);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(filter);filter.connect(a);a.connect(stereo);stereo.connect(inMusic?musicBus:master);voices.add(o);o.onended=()=>{voices.delete(o);o.disconnect();filter.disconnect();stereo.disconnect();a.disconnect()};o.start(t);o.stop(t+d+.015);}
+  function hiss(t,d,level=.12,f=1500){if(!ctx||muted)return;const o=ctx.createBufferSource(),a=ctx.createGain(),filter=ctx.createBiquadFilter();o.buffer=noise;filter.type='lowpass';filter.frequency.value=f;a.gain.setValueAtTime(level,t);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(filter);filter.connect(a);a.connect(inMusic?musicBus:master);voices.add(o);o.onended=()=>{voices.delete(o);o.disconnect();filter.disconnect();a.disconnect()};o.start(t);o.stop(t+d);}
   const melody=[
     [76,0,79,83,81,79,76,74,76,0,71,74,76,79,78,0],
     [74,0,78,81,79,78,74,71,74,0,69,71,74,78,76,0],
@@ -87,23 +87,38 @@ const sound = (() => {
     [84,83,79,76,79,81,84,88,86,84,83,79,81,79,76,74],
     [78,0,75,71,78,0,83,81,78,75,71,75,78,83,87,0]
   ];
-  function musicStep(i,t,bossTrack){const k=i%16,bar=Math.floor(i/16)%8,root=(bossTrack?[40,40,36,35]:[40,38,36,35])[bar%4],dur=60/(bossTrack?164:144)/4;
-    if(k%2===0)tone(hz(root+(k%8===6?7:0)),t,dur*1.65,'triangle',.22);
-    const chord=[0,3,7,12];tone(hz(root+24+chord[k%4]),t,dur*.7,'triangle',.075);
+  function musicStep(i,t,bossTrack){inMusic=true;
+    const k=i%16,bar=Math.floor(i/16)%8,root=(bossTrack?[40,40,36,35]:[40,38,36,35])[bar%4],dur=60/(bossTrack?164:144)/4;
+    const third=bar%4===3?4:3;
+    if(k%2===0){const bass=hz(root+(k%8===6?7:0));tone(bass,t,dur*1.8,'triangle',.2);tone(bass/2,t,dur*1.6,'sine',.13);}
+    // Stereo chord bed, arpeggio and a layered lead with two short echoes.
+    if(k===0)for(const [j,n] of [0,third,7,12].entries())tone(hz(root+12+n),t,dur*15,'triangle',.055,undefined,(j%2?1:-1)*.55);
+    const chord=[0,third,7,12];tone(hz(root+24+chord[k%4]),t,dur*.8,'triangle',.07,undefined,k%2?.45:-.45);
     const note=bossTrack?root+36+[0,7,12,7,3,10,12,10,0,7,15,12,10,7,3,7][k]:melody[bar][k];
-    if(note)tone(hz(note),t,dur*(k%4===0?1.6:.85),'square',.075);
-    if(k%8===0)tone(140,t,.12,'sine',.32,38);
-    if(k%8===4){hiss(t,.12,.16,2600);tone(180,t,.08,'triangle',.09,80);}
-    if(k%2===0)hiss(t,.025,.055,8500);
+    if(note){const f=hz(note),len=dur*(k%4===0?1.6:.85);tone(f*.998,t,len,'sawtooth',.055,undefined,-.18);tone(f*1.002,t,len,'square',.035,undefined,.18);tone(f,t+dur*1.5,len,'triangle',.033,undefined,-.55);tone(f,t+dur*3,len,'triangle',.016,undefined,.55);}
+    if(k%4===0){tone(155,t,.18,'sine',.32,40);hiss(t,.015,.07,6000);}
+    if(k%8===4){hiss(t,.16,.2,4200);tone(185,t,.12,'triangle',.14,85);hiss(t+.025,.1,.06,7000);}
+    if(k%2===0)hiss(t,k%4===2?.07:.025,.045,9500);
+    if(bar%4===3&&k>=13)tone(145-(k-13)*22,t,.1,'sine',.17,55);
+    inMusic=false;
+  }
+  function explosion(t,big=false){
+    // Sharp impact + noisy debris + low-frequency body; lower music briefly.
+    musicBus.gain.cancelScheduledValues(t);musicBus.gain.setValueAtTime(.38,t);musicBus.gain.linearRampToValueAtTime(.75,t+(big?.8:.3));
+    tone(big?110:155,t,big?.8:.32,'sine',big?.55:.4,28);
+    tone(230,t,.13,'sawtooth',.12,42);
+    hiss(t,.045,.38,7500);hiss(t+.015,big?.9:.38,.38,2100);
+    hiss(t+.065,big?.65:.22,.16,4300);
+    if(big){tone(65,t+.12,.9,'sine',.32,23);hiss(t+.22,.7,.25,1100);}
   }
   function tick(){if(!ctx||ctx.state!=='running')return;const target=state==='play'?(bossMade?'boss':'stage'):'idle';if(target!==track){stop();track=target;step=0;next=ctx.currentTime+.025;}if(target==='idle'||muted)return;const d=60/(target==='boss'?164:144)/4;if(next<ctx.currentTime-.1)next=ctx.currentTime+.015;while(next<ctx.currentTime+.12){musicStep(step++,next,target==='boss');next+=d;}}
   function effect(kind){if(!ctx||ctx.state!=='running'||muted)return;const t=ctx.currentTime+.005;
     if(kind==='shot')tone(1250,t,.065,'square',.045,350);
     if(kind==='laser')tone(2100,t,.11,'sawtooth',.035,190);
-    if(kind==='explode'){hiss(t,.22,.22,1800);tone(100,t,.18,'triangle',.15,30);}
-    if(kind==='damage'){hiss(t,.4,.3,2400);tone(210,t,.35,'sawtooth',.12,35);}
+    if(kind==='explode')explosion(t);
+    if(kind==='damage')explosion(t,true);
     if(kind==='pickup'||kind==='upgrade'){const notes=kind==='pickup'?[83,88]:[76,80,83,88];notes.forEach((n,i)=>tone(hz(n),t+i*.065,.15,'square',.11));}
-    if(kind==='clear'||kind==='over'){stop();track='idle';const notes=kind==='clear'?[76,79,83,88,83,88,91]:[76,71,67,63,59];notes.forEach((n,i)=>tone(hz(n),t+i*.17,.32,'triangle',.22));}
+    if(kind==='clear'||kind==='over'){stop();track='idle';explosion(t,true);const notes=kind==='clear'?[76,79,83,88,83,88,91]:[76,71,67,63,59];notes.forEach((n,i)=>tone(hz(n),t+.35+i*.17,.32,'triangle',.22));}
   }
   function restart(){stop();track='';step=0;next=ctx?ctx.currentTime+.025:0;}
   function quiet(){stop();track='idle';}
@@ -116,3 +131,4 @@ const sound = (() => {
 
 let last=0;function frame(now){let dt=Math.min((now-last)/1000||0,.035);last=now;if(state==='play')update(dt);draw(dt);syncControls();requestAnimationFrame(frame)}requestAnimationFrame(frame);
 </script></html>
+
