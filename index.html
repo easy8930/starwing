@@ -2,14 +2,15 @@
 html{min-height:100%;overscroll-behavior:none}body{min-height:100svh;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}button{min-height:44px;touch-action:manipulation}canvas{height:auto}.mobile-controls{display:none;align-items:center;justify-content:space-between;gap:16px;padding:10px 14px;user-select:none;-webkit-user-select:none}.touch-help{display:none;color:#a8c2dd;font-size:12px;margin:7px 0}.stick{width:130px;height:130px;flex:0 0 130px;border-radius:50%;position:relative;touch-action:none;background:radial-gradient(circle,#274963aa,#0d1a31);border:1px solid #456781;box-shadow:inset 0 0 24px #05101e}.stick:before{content:'＋';position:absolute;inset:0;display:grid;place-items:center;font-size:55px;color:#82b0c83b}.knob{position:absolute;left:calc(50% - 25px);top:calc(50% - 25px);width:50px;height:50px;border-radius:50%;background:radial-gradient(circle at 35% 25%,#98d7ed,#2a6188);box-shadow:0 5px 15px #0007;pointer-events:none}.actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;max-width:240px}.actions button{font-weight:bold;min-width:100px}.actions .power{background:#b97529;color:#fff4df;border-color:#ffbd62}.actions .power:disabled{background:#243246;color:#8da1ba;border-color:#3b4c60}.mobile-controls button{touch-action:none}
 @media (pointer:coarse),(max-width:760px){.mobile-controls{display:flex}.touch-help{display:block}header{margin:8px 0}h1{font-size:19px}small{font-size:10px}footer{font-size:11px;line-height:1.7;margin:7px 0}footer span:first-child{display:none}main{width:96vw}.actions{max-width:220px}}
 @media (orientation:landscape) and (max-height:600px) and (pointer:coarse){body{display:flex;justify-content:center}main{width:100%;position:relative}header{position:absolute;right:12px;top:38px;z-index:3;margin:0}header>div{display:none}header button{font-size:11px;opacity:.75;padding:4px 10px;min-height:34px}canvas{width:auto;height:min(100svh,56vw);max-width:100%;margin:auto;border-radius:0}.mobile-controls{position:absolute;inset:0;pointer-events:none;align-items:flex-end;padding:0 18px 42px}.mobile-controls>*{pointer-events:auto}.stick{width:105px;height:105px;flex-basis:105px;opacity:.65}.actions{max-width:220px;opacity:.85}.actions button{min-width:90px;font-size:12px;padding:6px}.touch-help,footer{display:none}}
-</style><main><header><div><h1>STARWING</h1><small>VISUAL EDITION / THE AZURE RIFT</small></div><button id="start">開始 / リトライ</button></header><canvas id="screen" width="1000" height="560" aria-label="横スクロールシューティングゲーム"></canvas><p class="touch-help">横持ち推奨 ｜ 左パッドで移動・自動連射 ｜ カプセル取得後に「強化」</p><div class="mobile-controls"><div class="stick" id="stick" role="group" aria-label="移動パッド"><div class="knob" id="knob"></div></div><div class="actions"><button class="power" id="power" disabled>強化 —</button><button id="pause">一時停止</button><button id="auto" aria-pressed="true">自動連射 ON</button></div></div><footer><span><kbd>↑↓←→</kbd> / WASD 移動　<kbd>Z</kbd> / Space 連射　<kbd>X</kbd> 強化　<kbd>P</kbd> 一時停止</span><span>カプセルで強化枠を選択 → Xで装備。約90秒後にボス出現。</span></footer></main><script>
+.audio-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0;color:#a8c2dd;font-size:12px}.audio-controls input{width:85px;min-height:32px;accent-color:#70dfef}.audio-controls button{padding:6px 12px}.audio-controls label{display:flex;align-items:center;gap:6px}@media (orientation:landscape) and (max-height:600px) and (pointer:coarse){.audio-controls{position:absolute;top:38px;left:12px;z-index:4;margin:0;gap:4px}.audio-controls button{min-height:34px;padding:4px 8px}.audio-controls input{width:65px}.audio-hint{display:none}}
+</style><main><header><div><h1>STARWING</h1><small>SOUND EDITION / THE AZURE RIFT</small></div><button id="start">開始 / リトライ</button></header><div class="audio-controls"><button id="sound" aria-pressed="true">音 ON</button><label for="volume">音量 <input id="volume" type="range" min="0" max="100" value="30"><output id="volume-value" for="volume">30%</output></label><span class="audio-hint">開始するとBGM・効果音が流れます</span></div><canvas id="screen" width="1000" height="560" aria-label="横スクロールシューティングゲーム"></canvas><p class="touch-help">横持ち推奨 ｜ 左パッドで移動・自動連射 ｜ カプセル取得後に「強化」</p><div class="mobile-controls"><div class="stick" id="stick" role="group" aria-label="移動パッド"><div class="knob" id="knob"></div></div><div class="actions"><button class="power" id="power" disabled>強化 —</button><button id="pause">一時停止</button><button id="auto" aria-pressed="true">自動連射 ON</button></div></div><footer><span><kbd>↑↓←→</kbd> / WASD 移動　<kbd>Z</kbd> / Space 連射　<kbd>X</kbd> 強化　<kbd>P</kbd> 一時停止</span><span>カプセルで強化枠を選択 → Xで装備。約90秒後にボス出現。</span></footer></main><script>
 'use strict';
 const canvas=document.getElementById('screen'),g=canvas.getContext('2d'),keys={};
 let state='title',time=0,score=0,lives=3,charge=0,shotCD=0,spawnCD=0,boss=null,bossMade=false,player,shots=[],enemies=[],bullets=[],caps=[],particles=[],history=[],best=0;
 try{best=Number(localStorage.getItem('starwing-best'))||0}catch{}
 const stars=Array.from({length:100},()=>({x:Math.random()*1000,y:Math.random()*560,z:Math.random()*2+.3}));
 const names=['SPEED','MISSILE','DOUBLE','LASER','OPTION','SHIELD'];
-function reset(){releaseStick();time=0;score=0;lives=3;charge=0;shotCD=0;spawnCD=1;boss=null;bossMade=false;shots=[];enemies=[];bullets=[];caps=[];particles=[];history=[];player={x:140,y:280,speed:0,missile:false,double:false,laser:false,option:false,shield:0,inv:2};state='play'}
+function reset(){sound.unlock();sound.restart();releaseStick();time=0;score=0;lives=3;charge=0;shotCD=0;spawnCD=1;boss=null;bossMade=false;shots=[];enemies=[];bullets=[];caps=[];particles=[];history=[];player={x:140,y:280,speed:0,missile:false,double:false,laser:false,option:false,shield:0,inv:2};state='play'}
 const stick=document.getElementById('stick'),knob=document.getElementById('knob'),powerButton=document.getElementById('power'),pauseButton=document.getElementById('pause'),autoButton=document.getElementById('auto');
 let touchX=0,touchY=0,stickPointer=null,autoFire=matchMedia('(pointer:coarse)').matches||navigator.maxTouchPoints>0;
 function releaseStick(){touchX=touchY=0;stickPointer=null;knob.style.transform='translate(0px,0px)'}
@@ -17,29 +18,29 @@ function moveStick(e){if(e.pointerId!==stickPointer)return;const r=stick.getBoun
 stick.addEventListener('pointerdown',e=>{if(stickPointer!==null)return;e.preventDefault();stickPointer=e.pointerId;stick.setPointerCapture(e.pointerId);moveStick(e)});
 stick.addEventListener('pointermove',e=>{if(e.pointerId===stickPointer){e.preventDefault();moveStick(e)}});
 for(const type of ['pointerup','pointercancel','lostpointercapture'])stick.addEventListener(type,e=>{if(e.pointerId===stickPointer)releaseStick()});
-function togglePause(){if(state==='play')state='pause';else if(state==='pause')state='play';releaseStick();syncControls()}
+function togglePause(){sound.unlock();sound.quiet();if(state==='play')state='pause';else if(state==='pause')state='play';releaseStick();syncControls()}
 function syncControls(){powerButton.disabled=state!=='play'||!charge;powerButton.textContent=charge?'強化 '+names[charge-1]:'強化 —';pauseButton.textContent=state==='pause'?'再開':'一時停止';pauseButton.disabled=state!=='play'&&state!=='pause';autoButton.textContent='自動連射 '+(autoFire?'ON':'OFF');autoButton.setAttribute('aria-pressed',String(autoFire))}
 powerButton.addEventListener('pointerdown',e=>{e.preventDefault();if(state==='play'){upgrade();syncControls()}});
 pauseButton.onclick=togglePause;autoButton.onclick=()=>{autoFire=!autoFire;syncControls()};
-document.addEventListener('visibilitychange',()=>{if(document.hidden){releaseStick();Object.keys(keys).forEach(k=>delete keys[k]);if(state==='play')state='pause';syncControls()}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){sound.quiet();releaseStick();Object.keys(keys).forEach(k=>delete keys[k]);if(state==='play')state='pause';syncControls()}});
 addEventListener('resize',releaseStick);
 document.getElementById('start').onclick=reset;
 addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();keys[e.code]=true;if(e.repeat)return;if(e.code==='Enter'&&state!=='play')reset();if(e.code==='KeyP')togglePause();if(e.code==='KeyX'&&state==='play')upgrade()});
-addEventListener('keyup',e=>keys[e.code]=false);addEventListener('blur',()=>{releaseStick();Object.keys(keys).forEach(k=>delete keys[k]);if(state==='play')state='pause'});
-function upgrade(){if(!charge)return;switch(charge){case 1:player.speed=Math.min(3,player.speed+1);break;case 2:player.missile=true;break;case 3:player.double=true;player.laser=false;break;case 4:player.laser=true;player.double=false;break;case 5:player.option=true;break;case 6:player.shield=3;break}charge=0}
+addEventListener('keyup',e=>keys[e.code]=false);addEventListener('blur',()=>{sound.quiet();releaseStick();Object.keys(keys).forEach(k=>delete keys[k]);if(state==='play')state='pause'});
+function upgrade(){if(!charge)return;sound.effect('upgrade');switch(charge){case 1:player.speed=Math.min(3,player.speed+1);break;case 2:player.missile=true;break;case 3:player.double=true;player.laser=false;break;case 4:player.laser=true;player.double=false;break;case 5:player.option=true;break;case 6:player.shield=3;break}charge=0}
 function burst(x,y,color,n=18){for(let i=0;i<n;i++){let a=Math.random()*Math.PI*2,s=Math.random()*180+30;particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.5+Math.random()*.4,color})}}
-function hit(){if(player.inv>0||state!=='play')return;burst(player.x,player.y,'#7ceaff');player.inv=2;if(player.shield>0){player.shield--;return}lives--;if(lives<=0){finish('over');return}player.x=140;player.y=280;player.speed=Math.max(0,player.speed-1);bullets=[]}
-function finish(s){state=s;best=Math.max(best,score);try{localStorage.setItem('starwing-best',best)}catch{}}
+function hit(){if(player.inv>0||state!=='play')return;sound.effect('damage');burst(player.x,player.y,'#7ceaff');player.inv=2;if(player.shield>0){player.shield--;return}lives--;if(lives<=0){finish('over');return}player.x=140;player.y=280;player.speed=Math.max(0,player.speed-1);bullets=[]}
+function finish(s){state=s;sound.effect(s);best=Math.max(best,score);try{localStorage.setItem('starwing-best',best)}catch{}}
 function fire(x,y){shots.push({x:x+20,y,vx:700,vy:0,r:player.laser?5:3,damage:player.laser?2:1,len:player.laser?65:17});if(player.double)shots.push({x:x+10,y:y-8,vx:570,vy:-230,r:3,damage:1,len:17});if(player.missile)shots.push({x,y:y+12,vx:360,vy:180,r:4,damage:2,len:12})}
 function enemyBullet(x,y,speed,offset=0){let a=Math.atan2(player.y-y,player.x-x)+offset;bullets.push({x,y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,r:5})}
-function update(dt){time+=dt;player.inv=Math.max(0,player.inv-dt);let dx=(keys.ArrowRight||keys.KeyD?1:0)-(keys.ArrowLeft||keys.KeyA?1:0),dy=(keys.ArrowDown||keys.KeyS?1:0)-(keys.ArrowUp||keys.KeyW?1:0),norm=Math.max(1,Math.hypot(dx+=touchX,dy+=touchY)),speed=270+player.speed*60;player.x=Math.max(24,Math.min(960,player.x+dx/norm*speed*dt));player.y=Math.max(65,Math.min(475,player.y+dy/norm*speed*dt));history.unshift({x:player.x,y:player.y});if(history.length>28)history.pop();shotCD-=dt;if((keys.KeyZ||keys.Space||autoFire)&&shotCD<=0){fire(player.x,player.y);if(player.option){let p=history[history.length-1];fire(p.x-40,p.y)}shotCD=.13}
+function update(dt){time+=dt;player.inv=Math.max(0,player.inv-dt);let dx=(keys.ArrowRight||keys.KeyD?1:0)-(keys.ArrowLeft||keys.KeyA?1:0),dy=(keys.ArrowDown||keys.KeyS?1:0)-(keys.ArrowUp||keys.KeyW?1:0),norm=Math.max(1,Math.hypot(dx+=touchX,dy+=touchY)),speed=270+player.speed*60;player.x=Math.max(24,Math.min(960,player.x+dx/norm*speed*dt));player.y=Math.max(65,Math.min(475,player.y+dy/norm*speed*dt));history.unshift({x:player.x,y:player.y});if(history.length>28)history.pop();shotCD-=dt;if((keys.KeyZ||keys.Space||autoFire)&&shotCD<=0){sound.effect(player.laser?'laser':'shot');fire(player.x,player.y);if(player.option){let p=history[history.length-1];fire(p.x-40,p.y)}shotCD=.13}
 spawnCD-=dt;if(time<90&&spawnCD<=0){let y=95+Math.random()*340;for(let i=0;i<4;i++)enemies.push({x:1050+i*48,y,base:y,age:-i*.25,hp:2,r:16,red:i===3,cd:1.5+Math.random()});spawnCD=2.8-Math.min(1,time/90)}
 if(time>=90&&!bossMade){bossMade=true;boss={x:1120,y:270,hp:260,max:260,cd:1,r:64};enemies=[];bullets=[]}
 for(const e of enemies){e.x-=(145+time*.45)*dt;e.age+=dt;e.y=e.base+Math.sin(e.age*3)*48;e.cd-=dt;if(e.cd<=0&&e.x<930&&e.x>player.x){enemyBullet(e.x,e.y,160+time*.35);e.cd=2.8}if(Math.hypot(e.x-player.x,e.y-player.y)<e.r+12)hit()}
 if(boss){boss.x=Math.max(835,boss.x-100*dt);boss.y=270+Math.sin(time*1.3)*135;boss.cd-=dt;if(boss.cd<=0){for(let i=-2;i<=2;i++)enemyBullet(boss.x-48,boss.y,210,i*.18);boss.cd=boss.hp<100?.65:1}if(Math.hypot(boss.x-player.x,boss.y-player.y)<75)hit()}
-for(const s of shots){s.x+=s.vx*dt;s.y+=s.vy*dt;for(const e of enemies){if(e.hp>0&&Math.abs(s.x-e.x)<e.r+s.len/2&&Math.abs(s.y-e.y)<e.r+s.r){e.hp-=s.damage;s.dead=true;if(e.hp<=0){score+=100;burst(e.x,e.y,e.red?'#ffbc5b':'#47bfff');if(e.red)caps.push({x:e.x,y:e.y})}break}}if(!s.dead&&boss&&Math.abs(s.x-boss.x)<60+s.len/2&&Math.abs(s.y-boss.y)<62){boss.hp-=s.damage;s.dead=true;burst(s.x,s.y,'#ffa96e',2);if(boss.hp<=0){burst(boss.x,boss.y,'#ffcc77',100);score+=5000;boss=null;finish('clear')}}}
+for(const s of shots){s.x+=s.vx*dt;s.y+=s.vy*dt;for(const e of enemies){if(e.hp>0&&Math.abs(s.x-e.x)<e.r+s.len/2&&Math.abs(s.y-e.y)<e.r+s.r){e.hp-=s.damage;s.dead=true;if(e.hp<=0){score+=100;sound.effect('explode');burst(e.x,e.y,e.red?'#ffbc5b':'#47bfff');if(e.red)caps.push({x:e.x,y:e.y})}break}}if(!s.dead&&boss&&Math.abs(s.x-boss.x)<60+s.len/2&&Math.abs(s.y-boss.y)<62){boss.hp-=s.damage;s.dead=true;burst(s.x,s.y,'#ffa96e',2);if(boss.hp<=0){burst(boss.x,boss.y,'#ffcc77',100);score+=5000;boss=null;finish('clear')}}}
 for(const b of bullets){b.x+=b.vx*dt;b.y+=b.vy*dt;if(Math.hypot(b.x-player.x,b.y-player.y)<b.r+9){b.dead=true;hit()}}
-for(const c of caps){c.x-=90*dt;if(Math.hypot(c.x-player.x,c.y-player.y)<27){c.dead=true;charge=charge%6+1;score+=50;burst(c.x,c.y,'#ffcf70',8)}}
+for(const c of caps){c.x-=90*dt;if(Math.hypot(c.x-player.x,c.y-player.y)<27){c.dead=true;sound.effect('pickup');charge=charge%6+1;score+=50;burst(c.x,c.y,'#ffcf70',8)}}
 shots=shots.filter(s=>!s.dead&&s.x<1100&&s.y<505&&s.y>42);enemies=enemies.filter(e=>e.hp>0&&e.x>-40);bullets=bullets.filter(b=>!b.dead&&b.x>-20&&b.x<1050&&b.y>40&&b.y<505);caps=caps.filter(c=>!c.dead&&c.x>-20);
 for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt}particles=particles.filter(p=>p.life>0)}
 function text(t,x,y,size=16,color='#dbeaff',align='left'){g.fillStyle=color;g.font=`${size}px system-ui`;g.textAlign=align;g.fillText(t,x,y)}
@@ -65,5 +66,53 @@ for(const p of particles){g.globalAlpha=Math.min(1,p.life*2);g.strokeStyle=p.col
 g.fillStyle='#0b1527';g.fillRect(0,0,1000,39);text('SCORE '+String(score).padStart(6,'0'),22,26);text('BEST '+String(best).padStart(6,'0'),260,26,14,'#849bb8');text('LIFE '+ '◆'.repeat(Math.max(0,lives)),580,26,16,'#80dfec');text(time<90?'BOSS IN '+Math.max(0,Math.ceil(90-time))+'s':'BOSS BATTLE',975,26,14,'#ffba79','right');
 g.fillStyle='#0b1527';g.fillRect(0,507,1000,53);names.forEach((n,i)=>{let x=14+i*163,active=charge===i+1;g.fillStyle=active?'#ffb75d':'#17263c';g.fillRect(x,516,153,33);let on=player&&[player.speed>0,player.missile,player.double,player.laser,player.option,player.shield>0][i];text((on?'● ':'')+n,x+76,538,14,active?'#142137':on?'#70e8c2':'#8399b5','center')});
 if(state!=='play'){g.fillStyle='rgba(4,10,23,.78)';g.fillRect(0,40,1000,467);let title={title:'STARWING',pause:'PAUSED',over:'MISSION FAILED',clear:'SECTOR CLEAR'}[state];text(title,500,238,48,'#dcf7ff','center');text(state==='title'?'蒼い宙域を突破せよ。カプセルを集め、機体を強化。':state==='pause'?'再開ボタン または P キーで再開':`SCORE ${score}  /  BEST ${best}`,500,287,18,'#99b9d3','center');text(state==='pause'?'離席・ウィンドウ切替でも自動停止します':'Enter または「開始 / リトライ」で出撃',500,334,16,'#ffbd70','center');text('OFFLINE • SINGLE PLAYER • ORIGINAL ARCADE',500,417,12,'#607996','center')}}
+// Original synthesized arcade score; no external audio files.
+const sound = (() => {
+  let ctx, master, noise, next=0, step=0, track='', muted=false, volume=.3;
+  const voices=new Set();
+  try { muted=localStorage.getItem('starwing-muted')==='true'; const v=localStorage.getItem('starwing-volume'); if(v!==null&&Number.isFinite(+v))volume=Math.max(0,Math.min(1,+v)); } catch {}
+  const hz=n=>440*2**((n-69)/12);
+  function stop(){for(const v of voices){try{v.stop()}catch{}}voices.clear();}
+  function gain(){if(master){master.gain.cancelScheduledValues(ctx.currentTime);master.gain.setTargetAtTime(muted?0:volume,ctx.currentTime,.015);}}
+  function unlock(){try{if(!ctx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;ctx=new AC();master=ctx.createGain();const limiter=ctx.createDynamicsCompressor();master.connect(limiter);limiter.connect(ctx.destination);noise=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate);const d=noise.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;gain();}if(ctx.state!=='running')ctx.resume().catch(()=>{});}catch{}}
+  function tone(f,t,d,type='square',level=.1,end){if(!ctx||muted)return;const o=ctx.createOscillator(),a=ctx.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(end)o.frequency.exponentialRampToValueAtTime(end,t+d);a.gain.setValueAtTime(0,t);a.gain.linearRampToValueAtTime(level,t+.004);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(a);a.connect(master);voices.add(o);o.onended=()=>{voices.delete(o);o.disconnect();a.disconnect()};o.start(t);o.stop(t+d+.015);}
+  function hiss(t,d,level=.12,f=1500){if(!ctx||muted)return;const o=ctx.createBufferSource(),a=ctx.createGain(),filter=ctx.createBiquadFilter();o.buffer=noise;filter.type='lowpass';filter.frequency.value=f;a.gain.setValueAtTime(level,t);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(filter);filter.connect(a);a.connect(master);voices.add(o);o.onended=()=>{voices.delete(o);o.disconnect();filter.disconnect();a.disconnect()};o.start(t);o.stop(t+d);}
+  const melody=[
+    [76,0,79,83,81,79,76,74,76,0,71,74,76,79,78,0],
+    [74,0,78,81,79,78,74,71,74,0,69,71,74,78,76,0],
+    [72,0,76,79,83,81,79,76,79,0,76,74,72,74,76,0],
+    [71,74,78,83,81,78,75,71,75,78,83,87,83,78,75,0],
+    [88,0,83,79,81,83,86,83,79,0,81,79,76,78,79,0],
+    [86,0,81,78,79,81,84,81,78,0,79,78,74,76,78,0],
+    [84,83,79,76,79,81,84,88,86,84,83,79,81,79,76,74],
+    [78,0,75,71,78,0,83,81,78,75,71,75,78,83,87,0]
+  ];
+  function musicStep(i,t,bossTrack){const k=i%16,bar=Math.floor(i/16)%8,root=(bossTrack?[40,40,36,35]:[40,38,36,35])[bar%4],dur=60/(bossTrack?164:144)/4;
+    if(k%2===0)tone(hz(root+(k%8===6?7:0)),t,dur*1.65,'triangle',.22);
+    const chord=[0,3,7,12];tone(hz(root+24+chord[k%4]),t,dur*.7,'triangle',.075);
+    const note=bossTrack?root+36+[0,7,12,7,3,10,12,10,0,7,15,12,10,7,3,7][k]:melody[bar][k];
+    if(note)tone(hz(note),t,dur*(k%4===0?1.6:.85),'square',.075);
+    if(k%8===0)tone(140,t,.12,'sine',.32,38);
+    if(k%8===4){hiss(t,.12,.16,2600);tone(180,t,.08,'triangle',.09,80);}
+    if(k%2===0)hiss(t,.025,.055,8500);
+  }
+  function tick(){if(!ctx||ctx.state!=='running')return;const target=state==='play'?(bossMade?'boss':'stage'):'idle';if(target!==track){stop();track=target;step=0;next=ctx.currentTime+.025;}if(target==='idle'||muted)return;const d=60/(target==='boss'?164:144)/4;if(next<ctx.currentTime-.1)next=ctx.currentTime+.015;while(next<ctx.currentTime+.12){musicStep(step++,next,target==='boss');next+=d;}}
+  function effect(kind){if(!ctx||ctx.state!=='running'||muted)return;const t=ctx.currentTime+.005;
+    if(kind==='shot')tone(1250,t,.065,'square',.045,350);
+    if(kind==='laser')tone(2100,t,.11,'sawtooth',.035,190);
+    if(kind==='explode'){hiss(t,.22,.22,1800);tone(100,t,.18,'triangle',.15,30);}
+    if(kind==='damage'){hiss(t,.4,.3,2400);tone(210,t,.35,'sawtooth',.12,35);}
+    if(kind==='pickup'||kind==='upgrade'){const notes=kind==='pickup'?[83,88]:[76,80,83,88];notes.forEach((n,i)=>tone(hz(n),t+i*.065,.15,'square',.11));}
+    if(kind==='clear'||kind==='over'){stop();track='idle';const notes=kind==='clear'?[76,79,83,88,83,88,91]:[76,71,67,63,59];notes.forEach((n,i)=>tone(hz(n),t+i*.17,.32,'triangle',.22));}
+  }
+  function restart(){stop();track='';step=0;next=ctx?ctx.currentTime+.025:0;}
+  function quiet(){stop();track='idle';}
+  function ui(){const b=document.getElementById('sound');b.textContent=muted?'音 OFF':'音 ON';b.setAttribute('aria-pressed',String(!muted));document.getElementById('volume').value=Math.round(volume*100);document.getElementById('volume-value').textContent=Math.round(volume*100)+'%';}
+  document.getElementById('sound').onclick=()=>{unlock();muted=!muted;gain();if(muted)stop();try{localStorage.setItem('starwing-muted',muted)}catch{}ui();};
+  document.getElementById('volume').oninput=e=>{unlock();volume=+e.target.value/100;gain();try{localStorage.setItem('starwing-volume',volume)}catch{}ui();};
+  setInterval(tick,25);ui();
+  return {unlock,effect,restart,quiet};
+})();
+
 let last=0;function frame(now){let dt=Math.min((now-last)/1000||0,.035);last=now;if(state==='play')update(dt);draw(dt);syncControls();requestAnimationFrame(frame)}requestAnimationFrame(frame);
 </script></html>
