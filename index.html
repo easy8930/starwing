@@ -4,7 +4,8 @@ html{min-height:100%;overscroll-behavior:none}body{min-height:100svh;padding:env
 @media (orientation:landscape) and (max-height:600px) and (pointer:coarse){body{display:flex;justify-content:center}main{width:100%;position:relative}header{position:absolute;right:12px;top:38px;z-index:3;margin:0}header>div{display:none}header button{font-size:11px;opacity:.75;padding:4px 10px;min-height:34px}canvas{width:auto;height:min(100svh,56vw);max-width:100%;margin:auto;border-radius:0}.mobile-controls{position:absolute;inset:0;pointer-events:none;align-items:flex-end;padding:0 18px 42px}.mobile-controls>*{pointer-events:auto}.stick{width:105px;height:105px;flex-basis:105px;opacity:.65}.actions{max-width:220px;opacity:.85}.actions button{min-width:90px;font-size:12px;padding:6px}.touch-help,footer{display:none}}
 .audio-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0;color:#a8c2dd;font-size:12px}.audio-controls input{width:85px;min-height:32px;accent-color:#70dfef}.audio-controls button{padding:6px 12px}.audio-controls label{display:flex;align-items:center;gap:6px}@media (orientation:landscape) and (max-height:600px) and (pointer:coarse){.audio-controls{position:absolute;top:38px;left:12px;z-index:4;margin:0;gap:4px}.audio-controls button{min-height:34px;padding:4px 8px}.audio-controls input{width:65px}.audio-hint{display:none}}
 dialog#results{color:#dceaff;background:linear-gradient(145deg,#162941,#080f20);border:1px solid #5a87a8;border-radius:16px;width:min(440px,94vw);max-height:90svh;overflow:auto;padding:20px;box-shadow:0 20px 80px #000b}#results::backdrop{background:#020712b8}#results h2{margin:0 0 8px;letter-spacing:3px}#results p{margin:8px 0;font-size:13px}#results table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;margin:12px 0}#results th,#results td{padding:5px 8px;text-align:left;border-bottom:1px solid #29415a}#results td:last-child,#results th:last-child{text-align:right}#results tr.current{background:#26516a;color:#ffe1a0}#results input{width:130px;padding:10px;font:20px monospace;letter-spacing:4px;text-transform:uppercase;background:#091526;color:white;border:1px solid #72b5ce;border-radius:6px}#results form{padding:12px;background:#203c50;border-radius:8px}#results .result-actions{display:flex;gap:8px;justify-content:flex-end}#rank-error{color:#ffbc9d}#results [hidden]{display:none}
-</style><main><header><div><h1>STARWING</h1><small>STAGE 3 REBALANCED / v2</small></div><button id="start">開始 / リトライ</button></header><div class="audio-controls"><button id="sound" aria-pressed="true">音 ON</button><button id="audio-retry">音を再開・テスト</button><label for="volume">音量 <input id="volume" type="range" min="0" max="100" value="30"><output id="volume-value" for="volume">30%</output></label><span class="audio-hint"><span id="audio-status" role="status">開始するとBGM・効果音が流れます</span></span></div><canvas id="screen" width="1000" height="560" aria-label="横スクロールシューティングゲーム"></canvas><p class="touch-help">横持ち推奨 ｜ 左パッドで移動・自動連射 ｜ カプセル取得後に「強化」</p><div class="mobile-controls"><div class="stick" id="stick" role="group" aria-label="移動パッド"><div class="knob" id="knob"></div></div><div class="actions"><button class="power" id="power" disabled>強化 —</button><button id="pause">一時停止</button><button id="auto" aria-pressed="true">自動連射 ON</button></div></div><footer><span><kbd>↑↓←→</kbd> / WASD 移動　<kbd>Z</kbd> / Space 連射　<kbd>X</kbd> 強化　<kbd>P</kbd> 一時停止</span><span>予告線の先から隕石・戦艦砲台・瓦礫が出現。撃って破壊可能！ 同じ武器を再取得でLv.3まで進化。DOUBLE／LASERは切替式（強化段階を保持）。</span></footer></main><dialog id="results" aria-labelledby="result-title"><h2 id="result-title">BEST 10</h2><p id="result-score"></p><form id="name-form" hidden novalidate><p><strong>NEW HIGH SCORE!</strong></p><label for="rank-name">名前（アルファベット1〜5文字）</label><p><input id="rank-name" maxlength="5" minlength="1" pattern="[A-Za-z]{1,5}" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="rank-error" required> <button type="submit">登録</button></p><p id="rank-error" role="alert"></p></form><table><thead><tr><th>順位</th><th>名前</th><th>スコア</th></tr></thead><tbody id="rank-rows"></tbody></table><p id="rank-storage">このブラウザーの記録です。未登録の名前はGUESTで表示します。</p><div class="result-actions"><button id="rank-close">閉じる</button><button id="rank-retry">もう一度遊ぶ</button></div></dialog><script>
+.nova-panel{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px;margin:10px 0;background:#14253b;border:1px solid #63e5ff;border-radius:10px}.nova-panel[hidden]{display:none}.nova-panel progress{flex:1;min-width:100px;accent-color:#67eaff}.nova-panel button:enabled{background:#a0f3ff;color:#071626;font-weight:bold}.nova-panel small{flex-basis:100%}
+</style><main><header><div><h1>STARWING</h1><small>NOVA BURST EDITION</small></div><button id="start">開始 / リトライ</button></header><div class="audio-controls"><button id="sound" aria-pressed="true">音 ON</button><button id="audio-retry">音を再開・テスト</button><label for="volume">音量 <input id="volume" type="range" min="0" max="100" value="30"><output id="volume-value" for="volume">30%</output></label><span class="audio-hint"><span id="audio-status" role="status">開始するとBGM・効果音が流れます</span></span></div><canvas id="screen" width="1000" height="560" aria-label="横スクロールシューティングゲーム"></canvas><div id="nova-panel" class="nova-panel" hidden><label id="nova-label" for="nova-meter">大爆発ゲージ 0%</label><progress id="nova-meter" max="40" value="0"></progress><button id="nova-button" disabled>撃破でチャージ [B]</button><small>4種の武器Lv.3で解放・40機撃破で満タン・画面内の敵とボスを一掃！</small></div><p class="touch-help">横持ち推奨 ｜ 左パッドで移動・自動連射 ｜ カプセル取得後に「強化」</p><div class="mobile-controls"><div class="stick" id="stick" role="group" aria-label="移動パッド"><div class="knob" id="knob"></div></div><div class="actions"><button class="power" id="power" disabled>強化 —</button><button id="pause">一時停止</button><button id="auto" aria-pressed="true">自動連射 ON</button></div></div><footer><span><kbd>↑↓←→</kbd> / WASD 移動　<kbd>Z</kbd> / Space 連射　<kbd>X</kbd> 強化　<kbd>P</kbd> 一時停止</span><span>予告線の先から隕石・戦艦砲台・瓦礫が出現。撃って破壊可能！ 同じ武器を再取得でLv.3まで進化。DOUBLE／LASERは切替式（強化段階を保持）。</span></footer></main><dialog id="results" aria-labelledby="result-title"><h2 id="result-title">BEST 10</h2><p id="result-score"></p><form id="name-form" hidden novalidate><p><strong>NEW HIGH SCORE!</strong></p><label for="rank-name">名前（アルファベット1〜5文字）</label><p><input id="rank-name" maxlength="5" minlength="1" pattern="[A-Za-z]{1,5}" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="rank-error" required> <button type="submit">登録</button></p><p id="rank-error" role="alert"></p></form><table><thead><tr><th>順位</th><th>名前</th><th>スコア</th></tr></thead><tbody id="rank-rows"></tbody></table><p id="rank-storage">このブラウザーの記録です。未登録の名前はGUESTで表示します。</p><div class="result-actions"><button id="rank-close">閉じる</button><button id="rank-retry">もう一度遊ぶ</button></div></dialog><script>
 'use strict';
 const canvas=document.getElementById('screen'),g=canvas.getContext('2d'),keys={};
 let stage=1,stageIntro=0;
@@ -62,7 +63,7 @@ function hitHazard(s){
   const dx=Math.max(0,Math.abs(s.x-h.x)-s.len/2),dy=Math.max(0,Math.abs(s.y-h.y)-s.r);
   if(Math.hypot(dx,dy)<h.r){
    h.hp-=s.damage;s.dead=true;
-   if(h.hp<=0){score+=h.kind==='turret'?500:h.kind==='wreck'?400:150;detonate(h.x,h.y,h.kind==='rock'?1.4:2);sound.effect('explode');}
+   if(h.hp<=0){chargeNova();score+=h.kind==='turret'?500:h.kind==='wreck'?400:150;detonate(h.x,h.y,h.kind==='rock'?1.4:2);sound.effect('explode');}
    else burst(s.x,s.y,'#ffc780',3);
    break;
   }
@@ -100,7 +101,42 @@ function drawHazards(){
  }g.restore();
 }
 
-function reset(){resetHazards();stage=1;stageIntro=0;if(results.open)results.close();rankingShown=false;currentRecord=null;blasts=[];debris=[];blastQueue=[];shake=0;victory=0;sound.unlock();sound.restart();releaseStick();time=0;score=0;lives=3;charge=0;shotCD=0;spawnCD=1;boss=null;bossMade=false;shots=[];enemies=[];bullets=[];caps=[];particles=[];history=[];player={x:140,y:280,speed:0,missile:0,double:0,laser:0,option:0,weapon:"normal",shield:0,inv:2};state='play'}
+
+const NOVA_MAX=40;
+let novaCharge=0,novaFlash=0;
+function novaUnlocked(){return !!player&&['missile','double','laser','option'].every(k=>player[k]>=3);}
+function chargeNova(){if(novaUnlocked())novaCharge=Math.min(NOVA_MAX,novaCharge+1);}
+function activateNova(){
+ if(state!=='play'||stageIntro>0||victory>0||!novaUnlocked()||novaCharge<NOVA_MAX)return;
+ novaCharge=0;novaFlash=1.1;player.inv=Math.max(player.inv,2);
+ const visible=o=>o.x>=0&&o.x<=1000&&o.y>=40&&o.y<=507;
+ let effects=0;
+ for(const e of enemies){if(e.hp>0&&visible(e)){e.hp=0;score+=100;if(e.red)caps.push({x:e.x,y:e.y});if(effects++<12)detonate(e.x,e.y,1.8);}}
+ enemies=enemies.filter(e=>e.hp>0);
+ for(const h of hazards){if(h.hp>0&&h.warning===0&&visible(h)){h.hp=0;score+=h.kind==='turret'?500:h.kind==='wreck'?400:150;if(effects++<16)detonate(h.x,h.y,2);}}
+ hazards=hazards.filter(h=>h.hp>0);bullets=[];
+ if(boss&&visible(boss)){const x=boss.x,y=boss.y;score+=stage===3?15000:stage===2?10000:5000;boss=null;bossDetonation(x,y);enemies=[];shots=[];}
+ detonate(player.x,player.y,2.5);sound.effect('nova');syncControls();
+}
+function syncNova(){
+ const unlocked=novaUnlocked();novaPanel.hidden=!unlocked;
+ novaMeter.value=novaCharge;novaLabel.textContent='大爆発ゲージ '+Math.floor(novaCharge/NOVA_MAX*100)+'%';
+ novaButton.disabled=!unlocked||novaCharge<NOVA_MAX||state!=='play'||stageIntro>0||victory>0;
+ novaButton.textContent=novaCharge>=NOVA_MAX?'大爆発！ [B]':'撃破でチャージ [B]';
+}
+function drawNova(){
+ if(novaFlash<=0)return;
+ const p=1-novaFlash/1.1;
+ g.save();g.globalCompositeOperation='lighter';
+ g.globalAlpha=(1-p)*(reducedMotion.matches?.12:.35);g.fillStyle='#a9eaff';g.fillRect(0,40,1000,467);
+ g.globalAlpha=(1-p)*.85;g.strokeStyle='#d4faff';g.lineWidth=12*(1-p)+2;
+ g.beginPath();g.arc(player.x,player.y,30+p*1150,0,Math.PI*2);g.stroke();
+ g.restore();text('NOVA BURST',500,110,28,'#e4fbff','center');
+}
+
+const novaPanel=document.getElementById('nova-panel'),novaMeter=document.getElementById('nova-meter'),novaLabel=document.getElementById('nova-label'),novaButton=document.getElementById('nova-button');
+novaButton.addEventListener('click',()=>{sound.unlock();activateNova();});
+function reset(){novaCharge=0;novaFlash=0;resetHazards();stage=1;stageIntro=0;if(results.open)results.close();rankingShown=false;currentRecord=null;blasts=[];debris=[];blastQueue=[];shake=0;victory=0;sound.unlock();sound.restart();releaseStick();time=0;score=0;lives=3;charge=0;shotCD=0;spawnCD=1;boss=null;bossMade=false;shots=[];enemies=[];bullets=[];caps=[];particles=[];history=[];player={x:140,y:280,speed:0,missile:0,double:0,laser:0,option:0,weapon:"normal",shield:0,inv:2};state='play'}
 const stick=document.getElementById('stick'),knob=document.getElementById('knob'),powerButton=document.getElementById('power'),pauseButton=document.getElementById('pause'),autoButton=document.getElementById('auto');
 let touchX=0,touchY=0,stickPointer=null,autoFire=matchMedia('(pointer:coarse)').matches||navigator.maxTouchPoints>0;
 function releaseStick(){touchX=touchY=0;stickPointer=null;knob.style.transform='translate(0px,0px)'}
@@ -109,13 +145,13 @@ stick.addEventListener('pointerdown',e=>{if(stickPointer!==null)return;e.prevent
 stick.addEventListener('pointermove',e=>{if(e.pointerId===stickPointer){e.preventDefault();moveStick(e)}});
 for(const type of ['pointerup','pointercancel','lostpointercapture'])stick.addEventListener(type,e=>{if(e.pointerId===stickPointer)releaseStick()});
 function togglePause(){sound.unlock();sound.quiet();if(state==='play')state='pause';else if(state==='pause'){state='play';sound.unlock();}releaseStick();syncControls()}
-function syncControls(){powerButton.disabled=state!=='play'||!charge;powerButton.textContent=charge?'強化 '+names[charge-1]:'強化 —';pauseButton.textContent=state==='pause'?'再開':'一時停止';pauseButton.disabled=state!=='play'&&state!=='pause';autoButton.textContent='自動連射 '+(autoFire?'ON':'OFF');autoButton.setAttribute('aria-pressed',String(autoFire))}
+function syncControls(){syncNova();powerButton.disabled=state!=='play'||!charge;powerButton.textContent=charge?'強化 '+names[charge-1]:'強化 —';pauseButton.textContent=state==='pause'?'再開':'一時停止';pauseButton.disabled=state!=='play'&&state!=='pause';autoButton.textContent='自動連射 '+(autoFire?'ON':'OFF');autoButton.setAttribute('aria-pressed',String(autoFire))}
 powerButton.addEventListener('pointerdown',e=>{e.preventDefault();if(state==='play'){upgrade();syncControls()}});
 pauseButton.onclick=togglePause;autoButton.onclick=()=>{autoFire=!autoFire;syncControls()};
 document.addEventListener('visibilitychange',()=>{if(document.hidden){sound.quiet();releaseStick();Object.keys(keys).forEach(k=>delete keys[k]);if(state==='play')state='pause';syncControls()}});
 addEventListener('resize',releaseStick);
 document.getElementById('start').onclick=reset;
-addEventListener('keydown',e=>{if(results.open)return;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();keys[e.code]=true;if(e.repeat)return;if(e.code==='Enter'&&state!=='play')reset();if(e.code==='KeyP')togglePause();if(e.code==='KeyX'&&state==='play')upgrade()});
+addEventListener('keydown',e=>{if(results.open)return;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();keys[e.code]=true;if(e.repeat)return;if(e.code==='Enter'&&state!=='play')reset();if(e.code==='KeyP')togglePause();if(e.code==='KeyB'){e.preventDefault();activateNova();}if(e.code==='KeyX'&&state==='play')upgrade()});
 addEventListener('keyup',e=>keys[e.code]=false);addEventListener('blur',()=>{sound.quiet();releaseStick();Object.keys(keys).forEach(k=>delete keys[k]);if(state==='play')state='pause'});
 function upgrade(){if(!charge)return;sound.effect('upgrade');switch(charge){case 1:player.speed=Math.min(3,player.speed+1);break;case 2:player.missile=Math.min(3,player.missile+1);break;case 3:player.double=Math.min(3,player.double+1);player.weapon="double";break;case 4:player.laser=Math.min(3,player.laser+1);player.weapon="laser";break;case 5:player.option=Math.min(3,player.option+1);break;case 6:player.shield=3;break}charge=0}
 let blasts=[],debris=[],blastQueue=[],shake=0,victory=0;
@@ -135,7 +171,7 @@ function bossDetonation(x,y){
   for(let i=0;i<7;i++){const a=i*2.4;blastQueue.push({delay:.12+i*.14,x:x+Math.cos(a)*55,y:y+Math.sin(a)*45,scale:1.3});}
   blastQueue.push({delay:1.15,x,y,scale:3});
 }
-function updateFX(dt){
+function updateFX(dt){novaFlash=Math.max(0,novaFlash-dt);
   shake=Math.max(0,shake-dt*14);
   for(const q of blastQueue){q.delay-=dt;if(q.delay<=0&&!q.done){q.done=true;detonate(q.x,q.y,q.scale);sound.effect('explode');}}
   blastQueue=blastQueue.filter(q=>!q.done);
@@ -171,7 +207,7 @@ function fire(x,y,aux=false){
  if(player.missile&&!aux){const lv=player.missile;for(let i=0;i<(lv===3?2:1);i++)shots.push({x,y:y+(i?-12:12),vx:280,vy:i?-90:90,r:4+lv*.4,damage:2+lv,len:14,kind:'missile',level:lv,life:3});}
 }
 function enemyBullet(x,y,speed,offset=0){let a=Math.atan2(player.y-y,player.x-x)+offset;bullets.push({x,y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,r:5})}
-function nextStage(){resetHazards();stage=Math.min(3,stage+1);time=0;stageIntro=3;boss=null;bossMade=false;enemies=[];bullets=[];shots=[];caps=[];history=[];blasts=[];debris=[];particles=[];blastQueue=[];shake=0;spawnCD=1;shotCD=0;player.x=140;player.y=280;player.inv=3;releaseStick();sound.restart();}
+function nextStage(){novaFlash=0;resetHazards();stage=Math.min(3,stage+1);time=0;stageIntro=3;boss=null;bossMade=false;enemies=[];bullets=[];shots=[];caps=[];history=[];blasts=[];debris=[];particles=[];blastQueue=[];shake=0;spawnCD=1;shotCD=0;player.x=140;player.y=280;player.inv=3;releaseStick();sound.restart();}
 function update(dt){if(stageIntro>0){stageIntro=Math.max(0,stageIntro-dt);return;}if(victory>0){victory=Math.max(0,victory-dt);if(!victory){if(stage<3)nextStage();else finish('clear')};return;}time+=dt;player.inv=Math.max(0,player.inv-dt);let dx=(keys.ArrowRight||keys.KeyD?1:0)-(keys.ArrowLeft||keys.KeyA?1:0),dy=(keys.ArrowDown||keys.KeyS?1:0)-(keys.ArrowUp||keys.KeyW?1:0),norm=Math.max(1,Math.hypot(dx+=touchX,dy+=touchY)),speed=270+player.speed*60;player.x=Math.max(24,Math.min(960,player.x+dx/norm*speed*dt));player.y=Math.max(65,Math.min(475,player.y+dy/norm*speed*dt));history.unshift({x:player.x,y:player.y});if(history.length>48)history.pop();shotCD-=dt;if((keys.KeyZ||keys.Space||autoFire)&&shotCD<=0){sound.effect(player.weapon==='laser'?'laser':'shot');fire(player.x,player.y);for(let i=0;i<player.option;i++){const p=optionPosition(i);fire(p.x,p.y,true)}shotCD=.13}
 updateHazards(dt);if(state!=='play')return;
 spawnCD-=dt;if(time<90&&spawnCD<=0){let y=95+Math.random()*340;for(let i=0;i<(stage>=2?6:4);i++)enemies.push({x:1050+i*48,y,base:y,age:-i*.25,hp:stage>=2?4:2,r:16,red:i===(stage>=2?5:3),cd:1.5+Math.random()});spawnCD=((stage>=2?1.9:2.8)-Math.min(stage>=2?.6:1,time/90))/(3*(stage>=2?2:1))}
@@ -182,7 +218,7 @@ for(const s of shots){s.life-=dt;if(s.kind==='missile'){
  const targets=[...hazards.filter(h=>h.hp>0&&h.warning===0&&h.x<1000),...enemies.filter(e=>e.hp>0),...(boss?[boss]:[])];let target=null,bestDistance=Infinity;
  for(const e of targets){const d=Math.hypot(e.x-s.x,e.y-s.y);if(d<bestDistance){target=e;bestDistance=d;}}
  if(target){const a=Math.atan2(target.y-s.y,target.x-s.x),speed=330+s.level*40,turn=1-Math.exp(-dt*(2+s.level));s.vx+=(Math.cos(a)*speed-s.vx)*turn;s.vy+=(Math.sin(a)*speed-s.vy)*turn;}
- }s.x+=s.vx*dt;s.y+=s.vy*dt;hitHazard(s);if(s.dead)continue;for(const e of enemies){if(e.hp>0&&Math.abs(s.x-e.x)<e.r+s.len/2&&Math.abs(s.y-e.y)<e.r+s.r){e.hp-=s.damage;s.dead=true;if(e.hp<=0){score+=100;sound.effect('explode');detonate(e.x,e.y,e.red?1.65:1.35);if(e.red)caps.push({x:e.x,y:e.y})}break}}if(!s.dead&&boss&&Math.abs(s.x-boss.x)<60+s.len/2&&Math.abs(s.y-boss.y)<62){boss.hp-=s.damage;s.dead=true;burst(s.x,s.y,'#ffa96e',2);if(boss.hp<=0){bossDetonation(boss.x,boss.y);score+=stage===3?15000:stage===2?10000:5000;boss=null;bullets=[];enemies=[];shots=[];break}}}
+ }s.x+=s.vx*dt;s.y+=s.vy*dt;hitHazard(s);if(s.dead)continue;for(const e of enemies){if(e.hp>0&&Math.abs(s.x-e.x)<e.r+s.len/2&&Math.abs(s.y-e.y)<e.r+s.r){e.hp-=s.damage;s.dead=true;if(e.hp<=0){chargeNova();score+=100;sound.effect('explode');detonate(e.x,e.y,e.red?1.65:1.35);if(e.red)caps.push({x:e.x,y:e.y})}break}}if(!s.dead&&boss&&Math.abs(s.x-boss.x)<60+s.len/2&&Math.abs(s.y-boss.y)<62){boss.hp-=s.damage;s.dead=true;burst(s.x,s.y,'#ffa96e',2);if(boss.hp<=0){bossDetonation(boss.x,boss.y);chargeNova();score+=stage===3?15000:stage===2?10000:5000;boss=null;bullets=[];enemies=[];shots=[];break}}}
 for(const b of bullets){b.x+=b.vx*dt;b.y+=b.vy*dt;if(Math.hypot(b.x-player.x,b.y-player.y)<b.r+9){b.dead=true;hit()}}
 for(const c of caps){c.x-=90*dt;if(Math.hypot(c.x-player.x,c.y-player.y)<27){c.dead=true;sound.effect('pickup');charge=charge%6+1;score+=50;burst(c.x,c.y,'#ffcf70',8)}}
 shots=shots.filter(s=>!s.dead&&s.life>0&&s.x>-40&&s.x<1100&&s.y<505&&s.y>42);enemies=enemies.filter(e=>e.hp>0&&e.x>-40);bullets=bullets.filter(b=>!b.dead&&b.x>-20&&b.x<1050&&b.y>40&&b.y<505);caps=caps.filter(c=>!c.dead&&c.x>-20);
@@ -237,7 +273,7 @@ for(const s of shots){if(s.kind==='missile'){g.save();g.translate(s.x,s.y);g.rot
 for(const b of bullets){g.shadowBlur=12;g.shadowColor='#ff306b';g.fillStyle='#ff477e';g.beginPath();g.arc(b.x,b.y,b.r+1,0,7);g.fill();g.shadowBlur=0;g.fillStyle='#ffe5ef';g.beginPath();g.arc(b.x,b.y,2,0,7);g.fill()}
 if(player){for(let i=0;i<player.option;i++){const p=optionPosition(i);ship(p.x,p.y,true)}if(player.inv<=0||Math.floor(player.inv*12)%2===0)ship(player.x,player.y);if(player.shield){glow(player.x,player.y,38,'#40e6c625');g.shadowBlur=12;g.shadowColor='#5bf2cc';g.strokeStyle='#5bf2cc';g.lineWidth=2;g.beginPath();g.arc(player.x,player.y,28,0,7);g.stroke();g.shadowBlur=0}}
 for(const p of particles){g.globalAlpha=Math.min(1,p.life*2);g.strokeStyle=p.color;g.lineWidth=Math.max(1,p.life*3);g.beginPath();g.moveTo(p.x,p.y);g.lineTo(p.x-p.vx*.045,p.y-p.vy*.045);g.stroke();g.fillStyle='#fff7d6';g.fillRect(p.x,p.y,2,2)}g.globalAlpha=1;
-drawFX();g.drawImage(vignette,0,0);g.restore();g.fillStyle='#0b1527';g.fillRect(0,0,1000,39);text('SCORE '+String(score).padStart(6,'0'),22,26);text('BEST '+String(best).padStart(6,'0'),260,26,14,'#849bb8');text('LIFE '+ '◆'.repeat(Math.max(0,lives)),580,26,16,'#80dfec');text('ST'+stage+' '+(time<90?'BOSS IN '+Math.max(0,Math.ceil(90-time))+'s':'BOSS BATTLE'),975,26,14,'#ffba79','right');
+drawFX();drawNova();g.drawImage(vignette,0,0);g.restore();g.fillStyle='#0b1527';g.fillRect(0,0,1000,39);text('SCORE '+String(score).padStart(6,'0'),22,26);text('BEST '+String(best).padStart(6,'0'),260,26,14,'#849bb8');text('LIFE '+ '◆'.repeat(Math.max(0,lives)),580,26,16,'#80dfec');text('ST'+stage+' '+(time<90?'BOSS IN '+Math.max(0,Math.ceil(90-time))+'s':'BOSS BATTLE'),975,26,14,'#ffba79','right');
 g.fillStyle='#0b1527';g.fillRect(0,507,1000,53);names.forEach((n,i)=>{let x=14+i*163,active=charge===i+1;g.fillStyle=active?'#ffb75d':'#17263c';g.fillRect(x,516,153,33);let on=player&&[player.speed>0,player.missile,player.double,player.laser,player.option,player.shield>0][i];const lv=player?[player.speed,player.missile,player.double,player.laser,player.option,player.shield][i]:0;const selected=player&&((i===2&&player.weapon==='double')||(i===3&&player.weapon==='laser'));text((selected?'▶ ':'')+n+(lv?' '+lv:''),x+76,538,13,active?'#142137':on?'#70e8c2':'#8399b5','center')});
 if(stageIntro>0&&state==='play'){g.fillStyle='#080d20ba';g.fillRect(0,180,1000,170);text(stage===3?'STAGE 3 — VOID REACTOR':'STAGE 2 — CRIMSON FORTRESS',500,245,30,'#ffbe9b','center');text(stage===3?'崩壊する基地 ｜ 瓦礫を破壊して反応炉へ':'巨大戦艦接近 ｜ 光る砲台を破壊せよ',500,290,16,'#dceaff','center');}if(state!=='play'){g.fillStyle='rgba(4,10,23,.78)';g.fillRect(0,40,1000,467);let title={title:'STARWING',pause:'PAUSED',over:'MISSION FAILED',clear:'SECTOR CLEAR'}[state];text(title,500,238,48,'#dcf7ff','center');text(state==='title'?'蒼い宙域を突破せよ。カプセルを集め、機体を強化。':state==='pause'?'再開ボタン または P キーで再開':`SCORE ${score}  /  BEST ${best}`,500,287,18,'#99b9d3','center');text(state==='pause'?'離席・ウィンドウ切替でも自動停止します':'Enter または「開始 / リトライ」で出撃',500,334,16,'#ffbd70','center');text('OFFLINE • SINGLE PLAYER • ORIGINAL ARCADE',500,417,12,'#607996','center')}}
 // Original synthesized arcade score; no external audio files.
@@ -324,6 +360,7 @@ const sound = (() => {
   function effect(kind){if(!ctx||ctx.state!=='running'||muted)return;const t=ctx.currentTime+.005;
     if(kind==='shot')tone(1250,t,.065,'square',.045,350);
     if(kind==='laser')tone(2100,t,.11,'sawtooth',.035,190);
+    if(kind==='nova'){explosion(t,true);[48,55,60,67,72].forEach((n,i)=>tone(hz(n),t+i*.06,.4,'triangle',.12));}
     if(kind==='explode')explosion(t);
     if(kind==='damage')explosion(t,true);
     if(kind==='pickup'||kind==='upgrade'){const notes=kind==='pickup'?[83,88]:[76,80,83,88];notes.forEach((n,i)=>tone(hz(n),t+i*.065,.15,'square',.11));}
