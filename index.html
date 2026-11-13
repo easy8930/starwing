@@ -13,7 +13,7 @@ dialog#results{color:#dceaff;background:linear-gradient(145deg,#162941,#080f20);
  #power{grid-column:1;grid-row:1}#auto{grid-column:1;grid-row:2}
  .nova-mobile{grid-column:2;grid-row:1}#pause{grid-column:2;grid-row:2}
 }
-</style><main><header><div><h1>STARWING</h1><small>SILVER FIGHTER / MECH PREVIEW</small></div><button id="start">開始 / リトライ</button></header><div class="audio-controls"><button id="sound" aria-pressed="true">音 ON</button><button id="audio-retry">音を再開・テスト</button><label for="volume">音量 <input id="volume" type="range" min="0" max="100" value="30"><output id="volume-value" for="volume">30%</output></label><span class="audio-hint"><span id="audio-status" role="status">開始するとBGM・効果音が流れます</span></span></div><canvas id="screen" width="1000" height="560" aria-label="横スクロールシューティングゲーム"></canvas><div id="nova-panel" class="nova-panel" hidden><label id="nova-label" for="nova-meter">BIG BOMBゲージ 0%</label><progress id="nova-meter" max="40" value="0"></progress><button id="nova-button" disabled>撃破でチャージ [B]</button><small>武器強化で機体が進化。4種Lv.3＋40機撃破でロボット形態へ変形！ BIG BOMB使用後は戦闘機に復帰。</small></div><p class="touch-help">横持ち推奨 ｜ 左パッドで移動・自動連射 ｜ カプセル取得後に「強化」</p><div class="mobile-controls"><div class="stick" id="stick" role="group" aria-label="移動パッド"><div class="knob" id="knob"></div></div><div class="actions"><button class="power" id="power" disabled>強化 —</button><div id="nova-mobile" class="nova-mobile" hidden><button id="nova-mobile-button" disabled>BIG BOMB 0%</button><progress id="nova-mobile-meter" max="40" value="0" aria-label="BIG BOMBゲージ"></progress></div><button id="pause">一時停止</button><button id="auto" aria-pressed="true">自動連射 ON</button></div></div><footer><span><kbd>↑↓←→</kbd> / WASD 移動　<kbd>Z</kbd> / Space 連射　<kbd>X</kbd> 強化　<kbd>P</kbd> 一時停止</span><span>予告線の先から隕石・戦艦砲台・瓦礫が出現。撃って破壊可能！ 同じ武器を再取得でLv.3まで進化。DOUBLE／LASERは切替式（強化段階を保持）。</span></footer></main><dialog id="results" aria-labelledby="result-title"><h2 id="result-title">BEST 10</h2><p id="result-score"></p><form id="name-form" hidden novalidate><p><strong>NEW HIGH SCORE!</strong></p><label for="rank-name">名前（アルファベット1〜5文字）</label><p><input id="rank-name" maxlength="5" minlength="1" pattern="[A-Za-z]{1,5}" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="rank-error" required> <button type="submit">登録</button></p><p id="rank-error" role="alert"></p></form><table><thead><tr><th>順位</th><th>名前</th><th>スコア</th></tr></thead><tbody id="rank-rows"></tbody></table><p id="rank-storage">このブラウザーの記録です。未登録の名前はGUESTで表示します。</p><div class="result-actions"><button id="rank-close">閉じる</button><button id="rank-retry">もう一度遊ぶ</button></div></dialog><script>
+</style><main><header><div><h1>STARWING</h1><small>SILVER FIGHTER / WEAPON EVOLUTION</small></div><button id="start">開始 / リトライ</button></header><div class="audio-controls"><button id="sound" aria-pressed="true">音 ON</button><button id="audio-retry">音を再開・テスト</button><label for="volume">音量 <input id="volume" type="range" min="0" max="100" value="30"><output id="volume-value" for="volume">30%</output></label><span class="audio-hint"><span id="audio-status" role="status">開始するとBGM・効果音が流れます</span></span></div><canvas id="screen" width="1000" height="560" aria-label="横スクロールシューティングゲーム"></canvas><div id="nova-panel" class="nova-panel" hidden><label id="nova-label" for="nova-meter">BIG BOMBゲージ 0%</label><progress id="nova-meter" max="40" value="0"></progress><button id="nova-button" disabled>撃破でチャージ [B]</button><small>武器強化で戦闘機の外見が進化。4種Lv.3＋40機撃破でBIG BOMB発動可能！</small></div><p class="touch-help">横持ち推奨 ｜ 左パッドで移動・自動連射 ｜ カプセル取得後に「強化」</p><div class="mobile-controls"><div class="stick" id="stick" role="group" aria-label="移動パッド"><div class="knob" id="knob"></div></div><div class="actions"><button class="power" id="power" disabled>強化 —</button><div id="nova-mobile" class="nova-mobile" hidden><button id="nova-mobile-button" disabled>BIG BOMB 0%</button><progress id="nova-mobile-meter" max="40" value="0" aria-label="BIG BOMBゲージ"></progress></div><button id="pause">一時停止</button><button id="auto" aria-pressed="true">自動連射 ON</button></div></div><footer><span><kbd>↑↓←→</kbd> / WASD 移動　<kbd>Z</kbd> / Space 連射　<kbd>X</kbd> 強化　<kbd>P</kbd> 一時停止</span><span>予告線の先から隕石・戦艦砲台・瓦礫が出現。撃って破壊可能！ 同じ武器を再取得でLv.3まで進化。DOUBLE／LASERは切替式（強化段階を保持）。</span></footer></main><dialog id="results" aria-labelledby="result-title"><h2 id="result-title">BEST 10</h2><p id="result-score"></p><form id="name-form" hidden novalidate><p><strong>NEW HIGH SCORE!</strong></p><label for="rank-name">名前（アルファベット1〜5文字）</label><p><input id="rank-name" maxlength="5" minlength="1" pattern="[A-Za-z]{1,5}" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="rank-error" required> <button type="submit">登録</button></p><p id="rank-error" role="alert"></p></form><table><thead><tr><th>順位</th><th>名前</th><th>スコア</th></tr></thead><tbody id="rank-rows"></tbody></table><p id="rank-storage">このブラウザーの記録です。未登録の名前はGUESTで表示します。</p><div class="result-actions"><button id="rank-close">閉じる</button><button id="rank-retry">もう一度遊ぶ</button></div></dialog><script>
 'use strict';
 const canvas=document.getElementById('screen'),g=canvas.getContext('2d'),keys={};
 let stage=1,stageIntro=0;
@@ -282,76 +282,7 @@ function baseShip(x,y,option=false){
  g.restore();
 }
 
-function mechReady(){return novaUnlocked()&&novaCharge>=NOVA_MAX;}
-function mechArt(x,y){
- g.save();g.translate(x,y);g.scale(.8,.8);
- const armor=g.createLinearGradient(-25,-40,25,50);
- armor.addColorStop(0,'#eeecdc');armor.addColorStop(.35,'#c5c7b7');armor.addColorStop(.65,'#9fa895');armor.addColorStop(1,'#596b60');
- const plate=p=>poly(p,armor,'#d3d8c7');
- const oval=(x,y,rx,ry,fill=armor)=>{g.fillStyle=fill;g.beginPath();g.ellipse(x,y,rx,ry,0,0,Math.PI*2);g.fill();g.strokeStyle='#637265';g.lineWidth=1;g.stroke();};
- const seam=pts=>{g.strokeStyle='#68766a';g.lineWidth=.7;g.beginPath();pts.forEach((p,i)=>i?g.lineTo(...p):g.moveTo(...p));g.stroke();};
- const bolt=(x,y)=>{oval(x,y,1,1,'#4b5853');g.fillStyle='#f1ebd4';g.fillRect(x-.4,y-.7,.6,.6);};
- const flicker=reducedMotion.matches?0:Math.sin(time*28)*4;
- // Far-side limbs are darker, staggered behind the profile.
- poly([[-10,8],[0,12],[-5,27],[-18,35],[-26,29],[-19,19]],'#788374','#a8b39e');
- oval(-20,31,6,6,'#606f61');
- poly([[-25,33],[-14,34],[-18,46],[-6,49],[-5,53],[-26,52],[-31,47]],'#7b8876','#bcc5ad');
- poly([[-14,-15],[1,-13],[9,-2],[23,0],[23,6],[2,6],[-12,-3]],'#68796b','#aab6a1');
- // Rear backpack and paired tall engine pods project behind the shoulders.
- poly([[-27,-27],[-9,-25],[-7,10],[-27,8]],'#3a4b43','#96a391');
- for(const [xx,yy] of [[-16,-35],[-30,-28]]){
-  g.save();g.translate(xx,yy);g.rotate(-.35);
-  plate([[-6,-15],[5,-15],[7,-11],[7,14],[-7,14],[-7,-11]]);
-  oval(0,-14,5,2,'#d6d9c6');g.fillStyle='#a84e42';g.fillRect(-6,-9,12,2);seam([[-3,-4],[-3,9]]);bolt(3,6);g.restore();
- }
- for(const yy of [-10,9]){
-  glow(-28,yy,21,'#4bbdff44');poly([[-27,yy-4],[-64-flicker,yy],[-27,yy+4]],'#3bafff88');
-  poly([[-28,yy-1.5],[-48-flicker,yy],[-28,yy+1.5]],'#d4faff');
- }
- // Deep barrel chest in side profile; front plate bulges toward the right.
- oval(0,-10,17,23);
- plate([[0,-29],[13,-24],[21,-13],[21,1],[12,12],[0,10],[5,-2],[4,-18]]);
- seam([[11,-19],[16,-12],[16,0],[10,6]]);bolt(11,-20);bolt(14,2);
- // Helmet side profile with a protruding brow and forward-facing red lens.
- poly([[-6,-28],[-7,-37],[0,-44],[11,-43],[16,-36],[20,-34],[19,-29],[10,-25]],armor,'#e1e4d2');
- poly([[8,-37],[17,-36],[20,-34],[18,-31],[8,-31]],'#263a31');
- glow(17,-33,7,'#ff443344');g.fillStyle='#f35f49';g.fillRect(16,-35,3,3);g.fillStyle='#ffe5bf';g.fillRect(18,-35,1,1);
- oval(1,-34,4,5,'#a5af9b');bolt(1,-34);
- plate([[10,-29],[18,-29],[16,-24],[8,-25]]);
- g.strokeStyle='#d5dbc2';g.lineWidth=1;g.beginPath();g.moveTo(-3,-40);g.lineTo(-7,-57);g.stroke();
- // Side skirt and near leg, bent forward at the knee for a hovering pose.
- oval(0,16,9,8,'#35483e');
- plate([[-8,10],[8,11],[13,27],[-1,32],[-12,23]]);
- seam([[-4,15],[0,26]]);bolt(-5,16);bolt(6,23);
- poly([[5,26],[16,21],[26,31],[22,39],[12,39],[2,32]],armor,'#d3d8c7');
- oval(20,35,8,7);seam([[16,30],[23,30],[26,35]]);
- plate([[14,40],[25,38],[27,51],[19,57],[8,54],[8,46]]);
- plate([[16,42],[24,41],[24,51],[16,53]]);bolt(18,45);bolt(21,50);
- oval(17,57,5,4,'#405348');
- plate([[11,57],[22,55],[26,61],[37,64],[36,68],[15,67],[9,63]]);
- seam([[24,62],[27,67]]);poly([[10,51],[1,56],[10,56]],'#9eac95','#d2d9c3');
- // One dominant shoulder with the opposite shoulder partly occluded.
- oval(-3,-16,10,11,'#3f5145');
- plate([[-14,-28],[1,-31],[10,-24],[10,-12],[3,-5],[-13,-9],[-19,-19]]);
- plate([[-13,-23],[2,-25],[5,-15],[-1,-10],[-12,-13]]);
- seam([[-5,-23],[-3,-12]]);bolt(-10,-20);bolt(2,-16);
- plate([[-9,-7],[3,-8],[9,5],[2,13],[-8,10],[-13,1]]);
- oval(2,9,6,6);plate([[6,6],[22,2],[30,7],[27,14],[10,16],[3,12]]);
- oval(28,7,4,4,'#415348');
- // Long horizontal rifle: muzzle and ordinary shots share y=0.
- poly([[19,-7],[37,-8],[43,-4],[62,-4],[62,4],[41,5],[35,10],[20,9]],'#414e46','#abb8a1');
- poly([[22,-7],[28,-12],[39,-12],[40,-7]],'#677669','#a5b49d');
- g.fillStyle='#263a30';g.fillRect(24,9,7,9);
- g.fillStyle='#97a58e';g.fillRect(42,-2,26,2);g.fillRect(42,2,26,2);
- plate([[65,-5],[72,-4],[74,-1],[74,5],[66,6]]);
- g.fillStyle='#243a2e';g.fillRect(70,-1,4,4);g.fillStyle='#9ae5cd';g.fillRect(73,0,1,2);
- seam([[24,-1],[33,-1],[37,3]]);
- g.restore();
-}
-function ship(x,y,option=false){
- if(!option&&player&&mechReady()){mechArt(x,y);return;}
- baseShip(x,y,option);
-}
+function ship(x,y,option=false){baseShip(x,y,option);}
 function enemyArt(e){g.save();g.translate(e.x,e.y);let color=e.red?'#ff9659':'#a994ff';glow(10,0,24,e.red?'#ff63353b':'#8d64ff33');let armor=g.createLinearGradient(0,-19,0,19);armor.addColorStop(0,e.red?'#d78b65':'#9a98c9');armor.addColorStop(.5,'#3b3555');armor.addColorStop(1,'#181c30');poly([[-24,0],[-9,-8],[-2,-20],[15,-15],[8,-4],[20,0],[8,4],[15,15],[-2,20],[-9,8]],armor,color);poly([[-17,0],[-3,-7],[10,0],[-3,7]],'#211b36','#79708b');glow(-7,0,12,color+'88');g.fillStyle=color;g.beginPath();g.ellipse(-7,0,6,3,0,0,7);g.fill();g.fillStyle='#e9dfff';g.fillRect(-11,-1,6,2);g.strokeStyle='#d9ceff88';g.lineWidth=1;for(const side of [-1,1]){g.beginPath();g.moveTo(1,side*17);g.lineTo(9,side*13);g.lineTo(3,side*7);g.stroke();g.fillStyle='#17152c';g.fillRect(2,side*11,5,2);}g.fillStyle=color;g.fillRect(13,-2,6,4);g.restore()}
 function bossArt(){g.save();g.translate(boss.x,boss.y);glow(25,0,110,'#9f51ff22');let metal=g.createLinearGradient(0,-75,0,75);metal.addColorStop(0,stage===3?'#b9acff':stage===2?'#e2a48c':'#95a5ba');metal.addColorStop(.25,'#3c506c');metal.addColorStop(.5,stage===3?'#30235f':stage===2?'#591c32':'#172d49');metal.addColorStop(.8,'#445878');metal.addColorStop(1,'#111d32');poly([[-63,-46],[3,-60],[48,-82],[82,-52],[98,0],[82,52],[48,82],[3,60],[-63,46],[-36,23],[-36,-23]],metal,'#809ec4');for(let side of [-1,1]){g.save();g.scale(1,side);poly([[-69,34],[-20,38],[23,57],[60,54],[41,77],[-7,62],[-68,58]],'#293d58','#607a98');g.fillStyle='#0c1424';g.fillRect(-65,40,42,11);g.fillStyle='#ff8263';g.fillRect(-65,43,22,4);for(let i=0;i<4;i++){g.fillStyle='#6180a0';g.fillRect(31+i*8,22,3,18)}g.restore()}g.strokeStyle='#9e9ad5';g.lineWidth=6;g.beginPath();g.arc(0,0,34,0,7);g.stroke();g.strokeStyle='#273752';g.lineWidth=9;g.beginPath();g.arc(0,0,43,.45,5.8);g.stroke();glow(0,0,50,'#ff734d99');const core=g.createRadialGradient(-5,-5,1,0,0,26);core.addColorStop(0,'#fff8db');core.addColorStop(.35,'#ffc574');core.addColorStop(1,'#e53962');g.fillStyle=core;g.beginPath();g.arc(0,0,23+Math.sin(time*8)*2,0,7);g.fill();g.strokeStyle='#fff0bc88';g.lineWidth=1;g.beginPath();g.arc(0,0,29, time*2,time*2+4);g.stroke();for(let i=0;i<12;i++){const a=i*Math.PI/6+time*.3;g.fillStyle=i%3?'#5b88b8':'#ffd6a1';g.fillRect(Math.cos(a)*49-2,Math.sin(a)*49-2,4,4);}g.strokeStyle='#9bd5ff55';g.lineWidth=1;for(const side of [-1,1]){g.beginPath();g.moveTo(15,side*55);g.lineTo(45,side*65);g.lineTo(70,side*44);g.stroke();}g.restore()}
 // Cached scenery: decorative objects never participate in collisions.
