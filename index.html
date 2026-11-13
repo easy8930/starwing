@@ -284,45 +284,84 @@ function baseShip(x,y,option=false){
 
 function mechReady(){return novaUnlocked()&&novaCharge>=NOVA_MAX;}
 function mechArt(x,y){
- g.save();g.translate(x,y);g.scale(.82,.82);
- const armor=g.createLinearGradient(-20,-35,22,36);armor.addColorStop(0,'#fffbe2');armor.addColorStop(.45,'#c2c4ad');armor.addColorStop(.6,'#858e7c');armor.addColorStop(1,'#414e4c');
- const plate=p=>poly(p,armor,'#dfe8cf');
- const joint=(x,y,r)=>{g.fillStyle='#202f39';g.beginPath();g.arc(x,y,r,0,7);g.fill();g.strokeStyle='#9aaea3';g.lineWidth=1;g.stroke();};
- const flicker=reducedMotion.matches?0:Math.sin(time*28)*5;
- // Twin backpack engines and plumes, facing left.
- for(const yy of [-19,8]){
-  glow(-27,yy,24,'#52dfff55');
-  poly([[-27,yy-5],[-69-flicker,yy],[-27,yy+5]],'#36aaff77');
-  poly([[-27,yy-2],[-52-flicker,yy],[-27,yy+2]],'#dbffff');
-  plate([[-30,yy-8],[-13,yy-10],[-9,yy+8],[-30,yy+8]]);
-  g.fillStyle='#aa4e42';g.fillRect(-29,yy-6,4,12);
+ g.save();g.translate(x,y);g.scale(.76,.76);
+ const armor=g.createLinearGradient(-30,-45,30,50);
+ armor.addColorStop(0,'#eceadd');armor.addColorStop(.3,'#c5c6b8');armor.addColorStop(.58,'#a7ac9e');armor.addColorStop(1,'#646f66');
+ const plate=p=>poly(p,armor,'#dddcd0');
+ const oval=(x,y,rx,ry,fill=armor)=>{g.fillStyle=fill;g.beginPath();g.ellipse(x,y,rx,ry,0,0,Math.PI*2);g.fill();g.strokeStyle='#636e66';g.lineWidth=1;g.stroke();};
+ const seam=(points)=>{g.strokeStyle='#68756d';g.lineWidth=.7;g.beginPath();points.forEach((p,i)=>i?g.lineTo(...p):g.moveTo(...p));g.stroke();};
+ const bolt=(x,y)=>{oval(x,y,1,1,'#4b5853');g.fillStyle='#e0e0cf';g.fillRect(x-.4,y-.7,.6,.6);};
+ const pulse=reducedMotion.matches?0:Math.sin(time*28)*4;
+ // Backpack and two elevated cylindrical engine pods.
+ poly([[-22,-24],[22,-24],[22,10],[-23,10]],'#39433f','#89928a');
+ for(const s of [-1,1]){
+  glow(-26,s*11,22,'#50baff44');
+  poly([[-24,s*11-3],[-60-pulse,s*11],[-24,s*11+3]],'#68cfff99');
+  g.save();g.translate(s*23,-29);g.rotate(s*.55);
+  plate([[-6,-21],[5,-21],[7,-17],[7,0],[-7,0],[-7,-17]]);
+  oval(0,-20,5,2,'#d1d1c3');g.fillStyle='#a35149';g.fillRect(-6,-14,12,2);
+  seam([[-3,-10],[-3,-2]]);bolt(3,-5);g.restore();
  }
- // Far leg, pelvis, then foreground leg: a bent space-flight pose.
- joint(-5,17,7);
- plate([[-12,16],[-2,16],[0,29],[-11,33],[-17,27]]);
- joint(-11,32,5);plate([[-17,31],[-6,33],[-9,43],[-22,45],[-24,40]]);
- plate([[-12,9],[10,9],[13,20],[1,26],[-12,21]]);
- joint(8,22,7);plate([[3,21],[15,21],[19,33],[8,37],[1,29]]);
- joint(13,35,5);plate([[8,35],[20,33],[23,43],[33,45],[33,49],[12,49],[7,44]]);
- // Broad chest, angular collar and helmet.
- plate([[-18,-15],[-4,-23],[15,-18],[20,-6],[11,11],[-12,10],[-21,0]]);
- poly([[-12,-11],[8,-14],[13,-6],[4,2],[-13,0]],'#e0dfc6','#879b91');
- g.fillStyle='#2d3b3d';g.fillRect(-8,4,17,4);
- for(let i=0;i<4;i++){g.fillStyle='#9aab98';g.fillRect(-7+i*4,4,2,4);}
- plate([[-8,-24],[-7,-34],[4,-38],[15,-33],[17,-23],[8,-19]]);
- poly([[0,-30],[14,-30],[16,-25],[2,-24]],'#23343d');
- glow(10,-27,9,'#ff3f5266');g.fillStyle='#ff5361';g.fillRect(7,-29,7,3);
- g.fillStyle='#ffe9d6';g.fillRect(11,-29,2,1);
- g.strokeStyle='#e5edd8';g.lineWidth=2;g.beginPath();g.moveTo(-3,-34);g.lineTo(-7,-46);g.stroke();
- // Shoulder, bent arm and long forward rifle aligned with the shot axis.
- joint(13,-10,9);plate([[8,-20],[23,-20],[29,-10],[25,-1],[12,0],[7,-8]]);
- g.fillStyle='#ab4f44';g.fillRect(15,-17,8,3);
- joint(22,4,5);plate([[18,-1],[28,0],[30,12],[21,16],[14,10]]);
- poly([[18,-5],[43,-5],[47,-2],[57,-2],[57,3],[42,3],[39,7],[22,7]],'#394a4e','#a9b9af');
- g.fillStyle='#c3cebf';g.fillRect(31,-4,12,2);g.fillStyle='#172a32';g.fillRect(26,5,7,9);
- g.fillStyle='#6ef4ff';g.fillRect(53,-1,4,3);
- for(const p of [[-13,-7],[17,-11],[11,26],[-23,-18]]){g.fillStyle='#35474b';g.beginPath();g.arc(p[0],p[1],1.5,0,7);g.fill();}
- glow(0,0,10,'#5beeff33');
+ // Exposed hip structure and heavy splayed legs.
+ oval(0,14,12,9,'#39443f');
+ for(const s of [-1,1]){
+  g.save();g.scale(s,1);
+  oval(11,20,7,7,'#37423f');
+  plate([[6,16],[18,17],[25,32],[20,38],[8,34],[3,25]]);
+  oval(19,34,9,8);seam([[13,29],[22,28],[26,33]]);
+  plate([[12,39],[25,36],[31,51],[25,58],[10,55],[8,46]]);
+  plate([[12,40],[21,40],[23,52],[12,53]]);
+  seam([[23,40],[27,49],[25,54]]);bolt(13,43);bolt(21,50);
+  oval(21,58,6,5,'#39453f');
+  plate([[14,57],[27,56],[31,65],[22,68],[12,63]]);
+  // Split armored toes and outer heel spur.
+  plate([[23,63],[29,62],[35,68],[29,70],[24,68]]);
+  plate([[15,63],[21,64],[25,70],[19,71],[13,67]]);
+  plate([[29,49],[39,54],[32,54],[28,52]]);
+  g.restore();
+ }
+ // Rounded barrel chest, collar and skirt armor.
+ oval(0,-9,20,23);
+ plate([[-19,-22],[-9,-27],[11,-25],[20,-18],[16,-13],[-15,-14]]);
+ seam([[-12,-10],[-12,2],[-5,10],[7,10],[14,2],[14,-9]]);
+ seam([[-4,-10],[-4,8]]);g.fillStyle='#e5e3d1';g.fillRect(-11,-19,17,2);
+ for(const s of [-1,1]){
+  g.save();g.scale(s,1);
+  plate([[4,13],[18,12],[24,29],[10,34],[4,27]]);
+  seam([[10,16],[19,29]]);bolt(8,17);bolt(17,26);bolt(11,30);
+  g.restore();
+ }
+ plate([[-4,13],[4,13],[6,28],[-5,28]]);g.fillStyle='#4d5951';g.fillRect(-2,19,5,2);
+ // Small recessed helmet and narrow red sensor.
+ oval(1,-32,10,9,'#646f64');
+ plate([[-8,-35],[-4,-43],[6,-44],[12,-35],[9,-28],[-5,-28]]);
+ poly([[-4,-35],[9,-36],[9,-31],[-4,-31]],'#26342e','#989f8f');
+ glow(4,-33,7,'#f94a3f44');g.fillStyle='#ed5547';g.fillRect(0,-34,6,2);
+ g.fillStyle='#fff3cc';g.fillRect(4,-34,1,1);
+ oval(3,-28,4,2,'#424d46');
+ g.strokeStyle='#d0d3bf';g.lineWidth=1;g.beginPath();g.moveTo(9,-41);g.lineTo(13,-61);g.stroke();
+ // Oversized box shoulders with inset armor panels.
+ for(const s of [-1,1]){
+  g.save();g.scale(s,1);
+  oval(23,-18,8,9,'#36423c');
+  plate([[18,-32],[29,-35],[37,-29],[39,-17],[32,-9],[19,-12],[15,-22]]);
+  plate([[20,-27],[33,-28],[35,-17],[28,-13],[20,-16]]);
+  seam([[26,-26],[27,-16]]);bolt(21,-24);bolt(32,-19);
+  oval(29,-2,6,7,'#414d43');
+  plate([[25,-9],[34,-6],[36,6],[27,10],[22,2]]);
+  oval(30,7,6,6);
+  if(s<0){plate([[25,12],[35,12],[36,26],[27,29],[23,21]]);g.fillStyle='#35423a';for(let i=0;i<3;i++)g.fillRect(27,14+i*4,2,2);oval(30,29,4,4,'#35413c');}
+  g.restore();
+ }
+ // Foreground arm and long dark rifle pointing in the firing direction.
+ plate([[24,9],[31,8],[35,15],[30,21],[20,18]]);
+ poly([[20,-5],[37,-7],[42,-3],[57,-3],[57,4],[40,5],[35,10],[21,9]],'#404945','#a6afa0');
+ poly([[20,-5],[31,-10],[39,-9],[37,-5]],'#626d63','#a3ad9e');
+ g.fillStyle='#29332e';g.fillRect(26,8,7,10);
+ g.fillStyle='#929b8c';g.fillRect(38,-2,26,2);g.fillRect(38,2,26,2);
+ poly([[61,-4],[68,-4],[70,-1],[70,5],[62,6]],'#46554d','#b4bcaa');
+ g.fillStyle='#1d2c29';g.fillRect(67,-1,3,4);g.fillStyle='#90dbcf';g.fillRect(69,0,1,2);
+ seam([[23,0],[32,0],[35,4]]);bolt(-12,-20);bolt(12,-20);
  g.restore();
 }
 function ship(x,y,option=false){
